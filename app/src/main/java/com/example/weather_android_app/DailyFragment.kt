@@ -46,7 +46,7 @@ class DailyFragment : Fragment() {
     private fun meanDailyWeather(weatherList:List<SingleWeather>):MutableList<SingleWeather>{
         val filteredWeather= mutableListOf<SingleWeather>()
         var curDate=weatherList[0].dt_txt.substring(0,10)
-        var temperature:Float= 0.0F
+        var temperature= 0.0F
         var wind=0.0F
         var humidity=0
         var count=0
@@ -54,19 +54,8 @@ class DailyFragment : Fragment() {
         var thunderstorm=0
         var clear=0
         var clouds=0
-        for(weather in weatherList){
-            if(curDate==weather.dt_txt.substring(0,10)){
-                count++
-                temperature+=weather.main.temp
-                humidity+=weather.main.humidity
-                wind+=weather.wind.speed
-                when(weather.weather[0].main){
-                    "Rain"->rain++
-                    "Clouds"->clouds++
-                    "Clear"->clear++
-                    "Thunderstorm"->thunderstorm++
-                }
-            }else{
+        for((index,weather) in weatherList.withIndex()){
+            if(curDate!=weather.dt_txt.substring(0,10) || index==weatherList.size-1){
                 filteredWeather.add(
                     SingleWeather(
                         main = Main(
@@ -87,6 +76,17 @@ class DailyFragment : Fragment() {
                 temperature=weather.main.temp
                 humidity=weather.main.humidity
                 wind=weather.wind.speed
+                when(weather.weather[0].main){
+                    "Rain"->rain++
+                    "Clouds"->clouds++
+                    "Clear"->clear++
+                    "Thunderstorm"->thunderstorm++
+                }
+            }else{
+                count++
+                temperature+=weather.main.temp
+                humidity+=weather.main.humidity
+                wind+=weather.wind.speed
                 when(weather.weather[0].main){
                     "Rain"->rain++
                     "Clouds"->clouds++
